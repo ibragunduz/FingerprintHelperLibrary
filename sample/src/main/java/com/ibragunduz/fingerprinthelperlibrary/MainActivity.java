@@ -1,87 +1,77 @@
 package com.ibragunduz.fingerprinthelperlibrary;
 
 import android.app.Activity;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ibragunduz.fingerprinthelper.FingerPrintHelper;
+import com.ibragunduz.fingerprinthelper.IbraFingerPrintHelper;
 
-public class MainActivity extends Activity {
-    FingerPrintHelper fph;
+
+/**
+ * Created by ibrahim Gündüz on 10.02.2018.
+ */
+
+public class MainActivity extends Activity implements IbraFingerPrintHelper.FingerPrintSetupListener,IbraFingerPrintHelper.FingerPrintAuthenticationListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toast.makeText(MainActivity.this, "Touch the fingerprint reader please", Toast.LENGTH_SHORT).show();
 
-        fph = new FingerPrintHelper(this);
-        doControl();
-
-    }
-    private void doControl(){
-        fph.setControllerToAuth(new FingerPrintHelper.FingerPrintSettingsController() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            IbraFingerPrintHelper aa = IbraFingerPrintHelper.createHelper(getApplicationContext(),"denee",this,this);
+            aa.start();
+        }
 
 
-            @Override
-            public void isDeviceNotSupportFingerPrint() {
-                Toast.makeText(MainActivity.this, "isDeviceNotSupportFingerPrint", Toast.LENGTH_SHORT).show();
-
-            }
-
-            @Override
-            public void isPermissionNotGranted() {
-                Toast.makeText(MainActivity.this, "isPermissionNotGranted", Toast.LENGTH_SHORT).show();
-
-            }
-
-            @Override
-            public void isThereNotAnyRegisteredFingerPrint() {
-                Toast.makeText(MainActivity.this, "isThereNotAnyRegisteredFingerPrint", Toast.LENGTH_SHORT).show();
-
-            }
-
-            @Override
-            public void isKeyguardNotSecure() {
-                Toast.makeText(MainActivity.this, "isKeyguardNotSecure", Toast.LENGTH_SHORT).show();
-
-            }
-
-            @Override
-            public void isReadyToAuth() {
-                startListening();
-
-            }
-
-        });
 
     }
-    private void startListening(){
 
 
-        fph .setFingerPrintListener(new FingerPrintHelper.FingerPrintListener() {
+    @Override
+    public void onDeviceNotSupportFingerPrint() {
+        showToast("Device not support.");
+    }
 
-            @Override
-            public void onFailed() {
-                Toast.makeText(MainActivity.this, "Stop! don't touch my phone", Toast.LENGTH_SHORT).show();
+    @Override
+    public void onPermissionDenied() {
+        showToast("Permission denied");
 
-            }
+    }
 
+    @Override
+    public void onThereAreNoRegisteredFingerPrint() {
+        showToast("Please add a finger print from settings.");
+    }
 
-            @Override
-            public void onCorrect() {
-                Toast.makeText(MainActivity.this, "Welcome", Toast.LENGTH_SHORT).show();
-                doControl();
-            }
+    @Override
+    public void onSucces() {
+        showToast("SUCCESSFUL!");
 
-            @Override
-            public void onError() {
-                Toast.makeText(MainActivity.this, "Error detected", Toast.LENGTH_SHORT).show();
-                doControl();
-            }
-        });
+    }
+
+    @Override
+    public void onFailed() {
+        showToast("Failed! Try another finger print");
+    }
+
+    @Override
+    public void onAuthenticationHelp(int helpMsgId, CharSequence helpString) {
+        showToast("Sensor dirty, please clean it.");
+    }
+
+    @Override
+    public void onError(int errMsgId, CharSequence errString) {
+        showToast("Error! Try again later");
+    }
+
+    private void showToast(String message){
+
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
 
