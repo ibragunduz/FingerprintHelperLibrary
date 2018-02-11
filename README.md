@@ -26,12 +26,14 @@ dependencies {
 ```
 ### Implement FingerPrintSetupListener and FingerPrintAuthenticationListener
 ```java
-public class MainActivity extends Activity implements IbraFingerPrintHelper.FingerPrintSetupListener,IbraFingerPrintHelper.FingerPrintAuthenticationListener{
+public class MainActivity extends Activity implements IbraFingerPrintHelper.FingerPrintSetupListener
+,IbraFingerPrintHelper.FingerPrintAuthenticationListener{
 
 ```
 ### Create an insance with createHelper() method
 ```java 
-IbraFingerPrintHelper fingerPrintHelper = IbraFingerPrintHelper.createHelper(getApplicationContext(),"YOUR_KEY",this,this);
+IbraFingerPrintHelper fingerPrintHelper = 
+IbraFingerPrintHelper.createHelper(getApplicationContext(),"YOUR_KEY",this,this);
 	fingerPrintHelper.start();
 ```
 ### Override FingerPrintSetupListener methods
