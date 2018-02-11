@@ -54,7 +54,6 @@ public class IbraFingerPrintHelper {
     private FingerprintManager.CryptoObject cryptoObject;
     private  FingerprintHandler helper;
 
-    /** @hide */
     private IbraFingerPrintHelper(FingerPrintAuthenticationListener fingerPrintAuthenticationListene,FingerPrintSetupListener fingerPrintSetupListene) {
 
         if (Build.VERSION_CODES.M<=Build.VERSION.SDK_INT) {
